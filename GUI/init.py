@@ -5,7 +5,7 @@ import datetime
 
 class AppInit:
     def __init__(self):
-        self.app = App(title="56XXX90 Standalone Prüfgerät TL300 Mainboard")
+        self.app = App(title="5677790 Standalone Prüfgerät TL300 Mainboard")
         self.app.set_full_screen()
 
         self.tests_status = []

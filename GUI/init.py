@@ -15,9 +15,8 @@ class AppInit:
         self.create_serial_number_input()
         self.create_test_list_header()
         self.timebox()
-        #self.time()
         self.test_manager = TestManager(
-            self.app, self.update_status, self.update_test_list
+            self.app, self.update_status, self.update_test_list, self.run_serial_number_prompt
         )
 
     def create_header(self):

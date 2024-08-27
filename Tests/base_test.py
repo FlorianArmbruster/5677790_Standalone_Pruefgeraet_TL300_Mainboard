@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from guizero import  info, error, yesno
 
 
+
 class BaseTest(ABC):
     def __init__(self, app, on_finish, test_index, manager):
         self.app = app
@@ -9,6 +10,7 @@ class BaseTest(ABC):
         self.test_index = test_index
         self.manager = manager
         self.result = "Pending"
+        
 
     @abstractmethod
     def execute(self):
@@ -29,3 +31,4 @@ class BaseTest(ABC):
         
     def start_next_board_y_n(self):
         yesno("Start next Bord Test", "Do you want to start the next Board test?")
+        self.manager.run_serial_prompt()

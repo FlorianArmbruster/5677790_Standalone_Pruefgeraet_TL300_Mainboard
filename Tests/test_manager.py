@@ -18,10 +18,11 @@ from .Done_Power_Off import donePowerOff
 # Import other tests here
 
 class TestManager:
-    def __init__(self, app, update_status_callback, register_test_callback):
+    def __init__(self, app, update_status_callback, register_test_callback,run_serial_promt_test):
         self.app = app
         self.update_status = update_status_callback
         self.register_test = register_test_callback
+        self.run_serial_prompt = run_serial_promt_test
 
         # Register all tests
         self.tests = []

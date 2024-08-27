@@ -52,3 +52,4 @@ class touchTest(BaseTest):
 
     def fail_action(self):
         self.complete("Failed")
+        self.tests_complete_failed()

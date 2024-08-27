@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from guizero import  info, error, yesno
 
 
 class BaseTest(ABC):
@@ -17,3 +18,14 @@ class BaseTest(ABC):
     def complete(self, result):
         self.result = result
         self.on_result(self.test_index, result)
+
+    def tests_complete_pass(self):
+        info("Tests Passed", "The Board Passed the Tests")
+        self.start_next_board_y_n()
+
+    def tests_complete_failed(self):
+        error("Tests Failed","The Board Failed the Tests")
+        self.start_next_board_y_n()
+        
+    def start_next_board_y_n(self):
+        yesno("Start next Bord Test", "Do you want to start the next Board test?")

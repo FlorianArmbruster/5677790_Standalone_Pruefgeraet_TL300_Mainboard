@@ -20,3 +20,4 @@ class loadSdCard(BaseTest):
             self.manager.execute_next_test()
         else:
             self.complete("Failed")
+            self.tests_complete_failed()

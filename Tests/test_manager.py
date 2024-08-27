@@ -77,9 +77,6 @@ class TestManager:
         self.register_test("Done/Power Off")
         self.tests.append(donePowerOff(app,self.update_status, len(self.tests),self))
 
-
-
-
         # Add other tests the same way: 
         # self.register_test("Another Test")
         # self.tests.append(AnotherTest(app, self.update_status, len(self.tests)))

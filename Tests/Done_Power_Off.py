@@ -11,12 +11,16 @@ class donePowerOff(BaseTest):
 
     def update_measurement_result(self):
         # Simulate retrieving a measurement result
-        self.measured_value = 3.7  # Here you would place your actual measurement code :D
+        self.measured_value = 3.8  # Here you would place your actual measurement code :D
         self.app.after(500, self.compare_measurement_results)
     
     def compare_measurement_results(self):
         if self.measured_value == 3.7:
             self.complete("Passed")
             self.manager.execute_next_test()
+            self.tests_complete_pass()
         else:
             self.complete("Failed")
+            self.tests_complete_failed()
+
+    

@@ -83,7 +83,11 @@ class TestManager:
 
         self.current_test_index = 0
 
+    def reset_test_index(self):
+        self.current_test_index = 0
+
     def execute_tests(self):
+        self.reset_test_index()
         self.execute_next_test()
 
     def execute_next_test(self):

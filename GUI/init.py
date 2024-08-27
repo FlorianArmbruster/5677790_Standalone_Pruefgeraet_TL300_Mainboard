@@ -83,6 +83,7 @@ class AppInit:
         test_box = Box(self.app, width="fill", height=30, align="top", border=True)
         test_name_box = Box(test_box, width=200, height=25, align="left")
         status_box = Box(test_box, width=200, height=25, align="right", border=True)
+        status_box.bg = "#eeeee4" 
 
         test_text = Text(test_name_box, text=test_name, align="left", size = 15)
         status_text = Text(status_box, text="Pending", align="top", size= 15)
@@ -103,7 +104,16 @@ class AppInit:
         text = self.app.question("SerialNumber", "Enter the Board SerialNumber:")
         if text is not None:
             self.serial_number.value = text
-            self.test_manager.execute_tests()     
+            self.test_manager.execute_tests()
+            self.reset_test_status()
+            
+    def reset_test_status(self):
+        for test_status in self.tests_status:
+            test_status["status"] = "Pending"
+
+        for status_text, status_box in self.test_status_boxes:
+            status_text.value = "Pending"
+            status_box.bg = "#eeeee4"       
 
     def run(self):
         self.app.display()

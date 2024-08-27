@@ -1,0 +1,112 @@
+from guizero import App, Text, PushButton, Box
+from Tests.test_manager import TestManager
+import datetime
+
+
+class AppInit:
+    def __init__(self):
+        self.app = App(title="56XXX90 Standalone Prüfgerät TL300 Mainboard")
+        self.app.set_full_screen()
+
+        self.tests_status = []
+
+        # Initialize the layout
+        self.create_header()
+        self.create_serial_number_input()
+        self.create_test_list_header()
+        self.timebox()
+        #self.time()
+        self.test_manager = TestManager(
+            self.app, self.update_status, self.update_test_list
+        )
+
+    def create_header(self):
+        header = Box(self.app, width="fill", height=30, align="top", border=True)
+        header.bg = "#A7A7A7"
+        message = Text(
+            header, text="56XXX90 Standalone Prüfgerät TL300 Mainboard", align="left"
+        )
+        message.text_size = 15
+
+    def timebox(self):
+        self.time_box = Box(self.app,width="fill", height=30, align ="bottom", border=True)
+        self.time_text = Text(self.time_box,text="test", align="right")
+        self.app.repeat(1000, self.time)
+        self.time()
+        
+
+    def time(self):
+        current_time = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+        self.time_text.value = current_time
+        
+
+    
+
+    def create_serial_number_input(self):
+        sn_box = Box(self.app, width="fill", height=30, align="top", border=True)
+        serial_number_text = Text(sn_box, text="SerialNumber:", align="left")
+        serial_number_text.text_size = 20
+        self.serial_number = Text(sn_box, align="left")
+        self.serial_number.text_size = 20
+
+        ssbutton_box= Box(sn_box, width= 100, height=30, align ="top", border=True)
+
+        start_button = PushButton(
+            ssbutton_box,
+            image="./Bilder/images.png",
+            align="right",
+            height=25,
+            width=25,
+            command=self.run_serial_number_prompt,
+        )
+
+        
+
+    def create_test_list_header(self):
+        self.test_list = Box(
+            self.app, width="fill", height=30, align="top", border=True
+        )
+        tests_header = Box(
+            self.test_list, width=200, height=30, align="left", border=True
+        )
+        status_header = Box(
+            self.test_list, width=200, height=30, align="right", border=True
+        )
+
+        test_text = Text(tests_header, text="Tests", align="left")
+        test_text.text_size = 20
+
+        status_test = Text(status_header, text="Status", align="top")
+        status_test.text_size = 20
+
+        # Dynamic test status list
+        self.test_status_boxes = []
+
+    def update_test_list(self, test_name):
+        test_box = Box(self.app, width="fill", height=30, align="top", border=True)
+        test_name_box = Box(test_box, width=200, height=25, align="left")
+        status_box = Box(test_box, width=200, height=25, align="right", border=True)
+
+        test_text = Text(test_name_box, text=test_name, align="left", size = 15)
+        status_text = Text(status_box, text="Pending", align="top", size= 15)
+
+        self.test_status_boxes.append((status_text, status_box))
+        self.tests_status.append({"name": test_name, "status": "Pending"})
+
+    def update_status(self, test_index, result):
+        status_text, status_box = self.test_status_boxes[test_index]
+        status_text.value = result
+        if result == "Passed":
+            status_box.bg = "#92d51f" # #92d51f = light green
+        else:
+            status_box.bg = "red"
+        self.tests_status[test_index]["status"] = result
+
+    def run_serial_number_prompt(self):
+        text = self.app.question("SerialNumber", "Enter the Board SerialNumber:")
+        if text is not None:
+            self.serial_number.value = text
+            self.test_manager.execute_tests()
+
+    def run(self):
+        self.app.display()

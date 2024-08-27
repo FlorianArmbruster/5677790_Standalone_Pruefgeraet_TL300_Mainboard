@@ -22,7 +22,7 @@ class AppInit:
 
     def create_header(self):
         header = Box(self.app, width="fill", height=30, align="top", border=True)
-        header.bg = "#A7A7A7"
+        header.bg = "#2691bb"
         message = Text(
             header, text="56XXX90 Standalone Prüfgerät TL300 Mainboard", align="left"
         )
@@ -34,13 +34,9 @@ class AppInit:
         self.app.repeat(1000, self.time)
         self.time()
         
-
     def time(self):
         current_time = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         self.time_text.value = current_time
-        
-
-    
 
     def create_serial_number_input(self):
         sn_box = Box(self.app, width="fill", height=30, align="top", border=True)
@@ -66,6 +62,7 @@ class AppInit:
         self.test_list = Box(
             self.app, width="fill", height=30, align="top", border=True
         )
+        self.test_list.bg = "#A7A7A7"
         tests_header = Box(
             self.test_list, width=200, height=30, align="left", border=True
         )
@@ -106,7 +103,7 @@ class AppInit:
         text = self.app.question("SerialNumber", "Enter the Board SerialNumber:")
         if text is not None:
             self.serial_number.value = text
-            self.test_manager.execute_tests()
+            self.test_manager.execute_tests()     
 
     def run(self):
         self.app.display()

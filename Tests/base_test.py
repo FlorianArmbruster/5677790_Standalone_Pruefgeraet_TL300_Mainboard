@@ -30,5 +30,6 @@ class BaseTest(ABC):
         self.start_next_board_y_n()
         
     def start_next_board_y_n(self):
-        yesno("Start next Bord Test", "Do you want to start the next Board test?")
-        self.manager.run_serial_prompt()
+        next_board = yesno("Start next Bord Test", "Do you want to start the next Board test?")
+        if next_board == True:
+            self.manager.run_serial_prompt()

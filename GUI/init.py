@@ -1,4 +1,4 @@
-from guizero import App, Text, PushButton, Box, yesno
+from guizero import App, Text, PushButton, Box, yesno, Picture
 from Tests.test_manager import TestManager
 import datetime
 
@@ -22,6 +22,7 @@ class AppInit:
     def create_header(self):
         header = Box(self.app, width="fill", height=30, align="top", border=True)
         header.bg = "#2691bb"
+        Picture(header, image = "./Bilder/Karl_Storz_Kreis.png", align= "left", height = 25, width = 25)
         message = Text(
             header, text="5677790 Standalone Prüfgerät TL300 Mainboard", align="left"
         )

@@ -1,4 +1,4 @@
-from guizero import App, Text, PushButton, Box
+from guizero import App, Text, PushButton, Box, yesno
 from Tests.test_manager import TestManager
 import datetime
 
@@ -27,6 +27,15 @@ class AppInit:
         )
         message.text_size = 15
 
+        close_icon = PushButton(
+            header,
+            image="./Bilder/Close_Icon.png",
+            align="right",
+            height=25,
+            width=25,
+            command=self.close_app
+            )
+
     def timebox(self):
         self.time_box = Box(self.app,width="fill", height=30, align ="bottom", border=True)
         self.time_text = Text(self.time_box,text="test", align="right")
@@ -54,7 +63,7 @@ class AppInit:
             width=25,
             command=self.run_serial_number_prompt,
         )
-
+        
         stop_button = PushButton(
             ssbutton_box,
             image="./Bilder/Stop_Button.png",
@@ -122,6 +131,11 @@ class AppInit:
             self.test_manager.execute_tests()
             self.reset_test_status()
             
+    def close_app(self):
+         close_prompt = yesno("Close","Do you want to close the App?")
+         if close_prompt == True:  
+             self.app.destroy()
+
     def stop_serial_number_prompt(self):
         print("test")
 

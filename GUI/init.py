@@ -48,7 +48,7 @@ class AppInit:
 
         start_button = PushButton(
             ssbutton_box,
-            image="./Bilder/images.png",
+            image="./Bilder/Play_Button.png",
             align="right",
             height=25,
             width=25,

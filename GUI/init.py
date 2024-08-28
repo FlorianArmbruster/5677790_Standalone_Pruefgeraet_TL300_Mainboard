@@ -53,7 +53,7 @@ class AppInit:
         self.serial_number = Text(sn_box, align="left")
         self.serial_number.text_size = 20
 
-        ssbutton_box= Box(sn_box, width= 100, height=30, align ="top", border=True)
+        ssbutton_box= Box(sn_box, width= 100, height=30, align ="top")
 
         self.start_button = PushButton(
             ssbutton_box,
@@ -143,7 +143,7 @@ class AppInit:
         self.test_manager.stop_current_tests()
         self.start_button.enable()
         self.stop_button.disable()
-        
+
     def reset_test_status(self):
         for test_status in self.tests_status:
             test_status["status"] = "Pending"

@@ -20,7 +20,10 @@ class donePowerOff(BaseTest):
             self.manager.execute_next_test()
             self.tests_complete_pass()
         else:
-            self.complete("Failed")
-            self.tests_complete_failed()
+            self.on_fail()
+
+    def on_fail(self):
+        self.complete("Failed")
+        self.tests_complete_failed()
 
     

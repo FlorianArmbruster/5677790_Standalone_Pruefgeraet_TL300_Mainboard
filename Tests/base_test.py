@@ -16,6 +16,11 @@ class BaseTest(ABC):
     def execute(self):
         """Executes the test and manages the popup."""
         pass
+    
+    @abstractmethod
+    def on_fail (self):
+        """Handles Failure"""
+        pass
 
     def complete(self, result):
         self.result = result
@@ -28,7 +33,7 @@ class BaseTest(ABC):
     def tests_complete_failed(self):
         error("Tests Failed","The Board Failed the Tests")
         self.start_next_board_y_n()
-        
+
     def start_next_board_y_n(self):
         next_board = yesno("Start next Bord Test", "Do you want to start the next Board test?")
         if next_board == True:

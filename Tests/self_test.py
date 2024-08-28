@@ -4,7 +4,7 @@ from .base_test import BaseTest
 class selfTest(BaseTest):
     def execute(self):
         self.perform_measurement()
-
+    
     def perform_measurement(self):
        # self.instruction_text.value = "Measuring battery voltage..."
         self.app.after(1000, self.update_measurement_result)
@@ -19,5 +19,8 @@ class selfTest(BaseTest):
             self.complete("Passed")
             self.manager.execute_next_test()
         else:
-            self.complete("Failed")
-            self.tests_complete_failed()
+            self.on_fail()
+
+    def on_fail(self):
+        self.complete("Failed")
+        self.tests_complete_failed()

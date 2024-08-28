@@ -19,5 +19,8 @@ class rtcTest(BaseTest):
             self.complete("Passed")
             self.manager.execute_next_test()
         else:
-            self.complete("Failed")
-            self.tests_complete_failed()
+            self.on_fail()
+
+    def on_fail(self):
+        self.complete("Failed")
+        self.tests_complete_failed()

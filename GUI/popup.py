@@ -59,3 +59,7 @@ class PopUpWindow:
     def show(self):
         self.window.show()
         self.window.enable()
+
+    def hide(self):
+        self.window.hide()
+        self.window.disable()

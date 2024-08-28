@@ -23,6 +23,7 @@ class TestManager:
         self.update_status = update_status_callback
         self.register_test = register_test_callback
         self.run_serial_prompt = run_serial_promt_test
+        #self.stop_current_test = stop_current_test
 
         # Register all tests
         self.tests = []
@@ -98,3 +99,6 @@ class TestManager:
             self.current_test_index += 1
         else:
             print("All tests completed.")
+
+    def stop_current_tests(self):
+        self.tests[self.current_test_index -1].on_fail()

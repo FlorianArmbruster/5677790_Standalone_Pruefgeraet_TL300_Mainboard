@@ -10,7 +10,7 @@ class BatteryChangeTest(BaseTest):
             title="Battery Change Test",
             content_box_builder=self.build_content_box,
             on_pass=self.pass_action,
-            on_fail=self.fail_action,
+            on_fail=self.on_fail,
         )
         
         self.popup = popup
@@ -51,6 +51,7 @@ class BatteryChangeTest(BaseTest):
         self.complete("Passed")
         self.manager.execute_next_test()
 
-    def fail_action(self):
+    def on_fail(self):
         self.complete("Failed")
         self.tests_complete_failed()
+        self.popup.hide()

@@ -7,7 +7,7 @@ class AppInit:
     def __init__(self):
         self.app = App(title="5677790 Standalone Prüfgerät TL300 Mainboard")
         self.app.set_full_screen()
-
+        
         self.tests_status = []
 
         # Initialize the layout
@@ -55,7 +55,7 @@ class AppInit:
 
         ssbutton_box= Box(sn_box, width= 100, height=30, align ="top", border=True)
 
-        start_button = PushButton(
+        self.start_button = PushButton(
             ssbutton_box,
             image="./Bilder/Play_Button.png",
             align="right",
@@ -64,16 +64,17 @@ class AppInit:
             command=self.run_serial_number_prompt,
         )
         
-        stop_button = PushButton(
+        self.stop_button = PushButton(
             ssbutton_box,
             image="./Bilder/Stop_Button.png",
             align="right",
             height=25,
             width=25,
-            command=self.stop_serial_number_prompt,
+            enabled = False,
+            command=self.stop_test,
         )
 
-        save_icon = PushButton(
+        self.save_icon = PushButton(
             ssbutton_box,
             image="./Bilder/Save_Icon.png",
             align="right",
@@ -130,15 +131,19 @@ class AppInit:
             self.serial_number.value = text
             self.test_manager.execute_tests()
             self.reset_test_status()
+            self.start_button.disable()
+            self.stop_button.enable()
             
     def close_app(self):
          close_prompt = yesno("Close","Do you want to close the App?")
          if close_prompt == True:  
              self.app.destroy()
 
-    def stop_serial_number_prompt(self):
-        print("test")
-
+    def stop_test(self):
+        self.test_manager.stop_current_tests()
+        self.start_button.enable()
+        self.stop_button.disable()
+        
     def reset_test_status(self):
         for test_status in self.tests_status:
             test_status["status"] = "Pending"

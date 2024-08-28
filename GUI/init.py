@@ -23,7 +23,7 @@ class AppInit:
         header = Box(self.app, width="fill", height=30, align="top", border=True)
         header.bg = "#2691bb"
         message = Text(
-            header, text="56XXX90 Standalone Prüfgerät TL300 Mainboard", align="left"
+            header, text="5677790 Standalone Prüfgerät TL300 Mainboard", align="left"
         )
         message.text_size = 15
 
@@ -55,7 +55,23 @@ class AppInit:
             command=self.run_serial_number_prompt,
         )
 
-        
+        stop_button = PushButton(
+            ssbutton_box,
+            image="./Bilder/Stop_Button.png",
+            align="right",
+            height=25,
+            width=25,
+            command=self.stop_serial_number_prompt,
+        )
+
+        save_icon = PushButton(
+            ssbutton_box,
+            image="./Bilder/Save_Icon.png",
+            align="right",
+            height=25,
+            width=25,
+            #command=self.stop_serial_number_prompt,
+        )
 
     def create_test_list_header(self):
         self.test_list = Box(
@@ -106,6 +122,9 @@ class AppInit:
             self.test_manager.execute_tests()
             self.reset_test_status()
             
+    def stop_serial_number_prompt(self):
+        print("test")
+
     def reset_test_status(self):
         for test_status in self.tests_status:
             test_status["status"] = "Pending"

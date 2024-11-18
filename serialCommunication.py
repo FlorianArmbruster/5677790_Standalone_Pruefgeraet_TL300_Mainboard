@@ -18,7 +18,8 @@ class SerialCommunication():
 
         for port in ports:
             self.comport = port.device
-    
+            self.ser = serial.Serial(self.comport,115200)  # Hier wird self.ser gesetzt
+                
     def printtext(self):
         self.message()
         self.getInfo()

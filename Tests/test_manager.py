@@ -15,6 +15,7 @@ from .Display_Farb_Test import displayFarbTest
 from .Touch_Test import touchTest
 from .Input_Voltage_Fail_Detection_Test import inputVoltageFailTest
 from .Done_Power_Off import donePowerOff
+from serialCommunication import SerialCommunication
 # Import other tests here
 
 class TestManager:
@@ -23,19 +24,20 @@ class TestManager:
         self.update_status = update_status_callback
         self.register_test = register_test_callback
         self.run_serial_prompt = run_serial_promt_test
+        self.serial_comm = SerialCommunication()
         #self.stop_current_test = stop_current_test
 
         # Register all tests
         self.tests = []
 
         self.register_test("Self Test")
-        self.tests.append(selfTest(app,self.update_status, len(self.tests), self))
+        self.tests.append(selfTest(app,self.update_status, len(self.tests), self, self.serial_comm))
 
         self.register_test("Battery Change")
         self.tests.append(BatteryChangeTest(app, self.update_status, len(self.tests), self))
 
         self.register_test("Activate Cylinder")
-        self.tests.append(activateCylinder(app,self.update_status, len(self.tests),self))
+        self.tests.append(activateCylinder(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Power On")
         self.tests.append(powerOn(app,self.update_status, len(self.tests),self))

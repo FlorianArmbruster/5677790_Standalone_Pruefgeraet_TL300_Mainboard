@@ -22,12 +22,20 @@ class BatteryChangeTest(BaseTest):
         
         box = Box(parent, width="fill", height="fill", align="top")
         box2 = Box(box, width="fill", height ="30", align= "top")
+        box5 = Box(box, width="fill", height ="40", align= "top")
+        box6 = Box(box, width="fill", height ="40", align= "top")
         box3= Box(box, width = 175, height= 20, align ="left")
         box4= Box(box, width = 175, height= 20, align ="right")
         BatteryF = Picture(box, image="./Bilder/Batterie_Falsch.JPG", align="left", height= 250, width= 250)
         BatteryR = Picture(box, image="./Bilder/Batterie_Richtig.JPG", align="right", height= 250, width= 250)
         self.instruction_text = Text(
             box2, text="Please ensure the battery is inserted correctly.", align="top", size= 20
+        )
+        self.instruction_text = Text(
+            box5, text="Warning: After clicking <Pass> the Cylinder will Activate!", align="top", color= "red", font= "Impact", size= 20
+        )
+        self.instruction_text = Text(
+            box6, text="Remove Hands from Testdevice!", align="top", color= "red", font= "Impact", size= 20
         )
        # self.measurement_text = Text(
        #     box, text="Waiting for measurement...", align="top"

@@ -4,6 +4,10 @@ from GUI.popup import PopUpWindow
 
 
 class displayFarbTest(BaseTest):
+    def __init__(self, app, update_status, index, manager, serial_comm):
+        super().__init__(app, update_status, index, manager)
+        self.serial_comm = serial_comm
+        
     def execute(self):
         popup = PopUpWindow(
             self.app,

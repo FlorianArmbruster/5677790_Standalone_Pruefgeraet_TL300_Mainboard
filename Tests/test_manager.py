@@ -43,43 +43,43 @@ class TestManager:
         self.tests.append(powerOn(app,self.update_status, len(self.tests),self))
 
         self.register_test("DMM")
-        self.tests.append(DMM(app,self.update_status, len(self.tests),self))
+        self.tests.append(DMM(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Load SD-Card")
-        self.tests.append(loadSdCard(app,self.update_status, len(self.tests),self))
+        self.tests.append(loadSdCard(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Status LED")
-        self.tests.append(statusLED(app,self.update_status, len(self.tests),self))
+        self.tests.append(statusLED(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Fan Test")
-        self.tests.append(fanTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(fanTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Audio Test")
-        self.tests.append(audioTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(audioTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("USB Test")
-        self.tests.append(usbTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(usbTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("RAM Test")
-        self.tests.append(ramTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(ramTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("SD Test")
-        self.tests.append(sdTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(sdTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("RTC Test")
-        self.tests.append(rtcTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(rtcTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Display Color Test")
-        self.tests.append(displayFarbTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(displayFarbTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Touch Test")
-        self.tests.append(touchTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(touchTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Input Voltage Fail Test")
-        self.tests.append(inputVoltageFailTest(app,self.update_status, len(self.tests),self))
+        self.tests.append(inputVoltageFailTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Done/Power Off")
-        self.tests.append(donePowerOff(app,self.update_status, len(self.tests),self))
+        self.tests.append(donePowerOff(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         # Add other tests the same way: 
         # self.register_test("Another Test")

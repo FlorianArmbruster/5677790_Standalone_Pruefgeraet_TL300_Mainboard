@@ -1,7 +1,5 @@
 import serial;
 import serial.tools.list_ports
-import time
-import threading
 
 
 class SerialCommunication():
@@ -65,23 +63,6 @@ class SerialCommunication():
             #self.connected = 1 #SIMULATION ONLY REMOVE FOR FINAL!!!!! 
             self.connected = 0
 
-            
-    #def wait_for_connection(self, callback_pass, callback_fail, timeout=10):
-               #"""
-               #Wartet bis zu `timeout` Sekunden, ob `connected == 1` wird.
-               #Ruft `callback_pass()` auf, wenn erfolgreich, sonst `callback_fail()`.
-               #"""
-
-    #    def check():
-    #        start_time = time.time()
-    #        while time.time() - start_time < timeout:
-    #            if self.connected == 1:
-    #                callback_pass()
-    #                return
-    #            time.sleep(0.1)
-    #            callback_fail()
-
-    #        threading.Thread(target=check, daemon=True).start()
 
                 
             

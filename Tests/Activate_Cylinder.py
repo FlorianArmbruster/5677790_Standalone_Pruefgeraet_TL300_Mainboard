@@ -25,6 +25,7 @@ class activateCylinder(BaseTest):
             self.serial_comm.ser.write(self.serial_comm.Text_bytes)
             data = self.serial_comm.ser.readline()
             dataDecoded = data.decode('utf-8')
+
             if self.serial_comm.Text in dataDecoded:
                 print(dataDecoded)
         except Exception as e:
@@ -32,7 +33,7 @@ class activateCylinder(BaseTest):
             self.on_fail()
             return
 
-        self.app.after(1000, self.compare_measurement_results)
+        self.app.after(500, self.compare_measurement_results)
 
     #def update_measurement_result(self):
         # Simulate retrieving a measurement result

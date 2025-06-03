@@ -1,3 +1,4 @@
+import time
 from .battery_change import BatteryChangeTest
 from .self_test import selfTest
 from .Activate_Cylinder import activateCylinder
@@ -36,88 +37,107 @@ class TestManager:
         #self.stop_current_test = stop_current_test
 
         self.serial_comm.getInfo()
+
+        
+        self.mandatory_test_names = [
+            "Self Test", "Battery Change", "Activate Cylinder", "Power On", "Done/Power Off"
+        ]
+
+
         # Register all tests
         self.tests = []
 
-        self.register_test("Self Test")
-        self.tests.append(selfTest(app,self.update_status, len(self.tests), self, self.serial_comm))
+        
+        def add_test(name, test_instance):
+            self.register_test(name)
+            self.tests.append((name, test_instance))
 
-        self.register_test("Battery Change")
-        self.tests.append(BatteryChangeTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Self Test", selfTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Battery Change", BatteryChangeTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Activate Cylinder", activateCylinder(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Power On", powerOn(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("DMM", DMM(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Load SD-Card", loadSdCard(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Status LED", statusLED(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Fan Test", fanTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Audio Test", audioTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("USB Test", usbTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("RAM Test", ramTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("SD Test", sdTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("RTC Test", rtcTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Display Color Test Green", displayFarbTestGn(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Display Color Test Blue", displayFarbTestBl(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Display Color Test Red", displayFarbTestRd(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Touch Test", touchTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Input Voltage Fail Test", inputVoltageFailTest(app, self.update_status, len(self.tests), self, self.serial_comm))
+        add_test("Done/Power Off", donePowerOff(app, self.update_status, len(self.tests), self, self.serial_comm))
 
-        self.register_test("Activate Cylinder")
-        self.tests.append(activateCylinder(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Power On")
-        self.tests.append(powerOn(app,self.update_status, len(self.tests),self,  self.serial_comm))
-
-        self.register_test("DMM")
-        self.tests.append(DMM(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Load SD-Card")
-        self.tests.append(loadSdCard(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Status LED")
-        self.tests.append(statusLED(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Fan Test")
-        self.tests.append(fanTest(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Audio Test")
-        self.tests.append(audioTest(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("USB Test")
-        self.tests.append(usbTest(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("RAM Test")
-        self.tests.append(ramTest(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("SD Test")
-        self.tests.append(sdTest(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("RTC Test")
-        self.tests.append(rtcTest(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Display Color Test Green")
-        self.tests.append(displayFarbTestGn(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Display Color Test Blue")
-        self.tests.append(displayFarbTestBl(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Display Color Test Red")
-        self.tests.append(displayFarbTestRd(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Touch Test")
-        self.tests.append(touchTest(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Input Voltage Fail Test")
-        self.tests.append(inputVoltageFailTest(app,self.update_status, len(self.tests),self, self.serial_comm))
-
-        self.register_test("Done/Power Off")
-        self.tests.append(donePowerOff(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         # Add other tests the same way: 
         # self.register_test("Another Test")
         # self.tests.append(AnotherTest(app, self.update_status, len(self.tests)))
 
+        self.filtered_tests = []
         self.current_test_index = 0
 
     def reset_test_index(self):
         self.current_test_index = 0
 
-    def execute_tests(self):
+   
+
+
+    def execute_tests(self, selected_test_names):
+        
+        self.filtered_tests = [
+            (name, test) for name, test in self.tests
+            if name in self.mandatory_test_names or name in selected_test_names
+        ]
+
         self.reset_test_index()
+
+        # Liste aller optionalen Tests
+        all_optional_tests = [
+            name for name, _ in self.tests
+            if name not in self.mandatory_test_names
+        ]
+
+        # Liste der optionalen Tests, die ausgewählt wurden
+        selected_optional_tests = [
+            name for name in selected_test_names
+            if name not in self.mandatory_test_names
+        ]
+
+        # Wenn nicht alle optionalen Tests ausgewählt wurden
+        if set(selected_optional_tests) != set(all_optional_tests) and selected_optional_tests:
+            # Finde den Namen des ersten optionalen Tests in der gefilterten Liste
+            for i, (name, _) in enumerate(self.filtered_tests):
+                if name in selected_optional_tests:
+                    first_optional_index = i
+                    break
+
+            original_execute_next = self.execute_next_test
+
+            def delayed_execute_next():
+                if self.current_test_index == first_optional_index:
+                    time.sleep(5)
+                original_execute_next()
+
+            self.execute_next_test = delayed_execute_next
+
         self.execute_next_test()
+
+
+
 
     def execute_next_test(self):
         
-        if self.current_test_index < len(self.tests):
-            current_test = self.tests[self.current_test_index]
+        if self.current_test_index < len(self.filtered_tests):
+            name, current_test = self.filtered_tests[self.current_test_index]
             self.current_test_index += 1
             current_test.execute()
-            
         else:
             print("All tests completed.")
 
     def stop_current_tests(self):
-        self.tests[self.current_test_index -1].on_fail()
+        if self.current_test_index > 0:
+            self.filtered_tests[self.current_test_index - 1].on_fail()

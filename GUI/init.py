@@ -1,4 +1,4 @@
-from guizero import App, Text, PushButton, Box, yesno, Picture
+from guizero import App, Text, PushButton, Box, yesno, Picture, CheckBox
 from Tests.test_manager import TestManager
 import datetime
 
@@ -20,6 +20,8 @@ class AppInit:
 
         )
 
+        self.create_test_selection_ui()
+
     def create_header(self):
         header = Box(self.app, width="fill", height=30, align="top", border=True)
         header.bg = "#2691bb"
@@ -37,6 +39,39 @@ class AppInit:
             width=25,
             command=self.close_app
             )
+        
+    def select_all_tests(self):
+        for checkbox in self.test_checkboxes.values():
+            checkbox.value = True
+
+    def deselect_all_tests(self):
+        for checkbox in self.test_checkboxes.values():
+            checkbox.value = False
+    
+    
+    def create_test_selection_ui(self):
+        self.test_checkboxes = {}
+        mandatory_tests = [
+            "Self Test", "Battery Change", "Activate Cylinder", "Power On", "Done/Power Off"
+        ]
+
+        # Container für Checkboxen
+        checkbox_container = Box(self.app, layout="grid", border=True)
+        row = 0
+        for name, _ in self.test_manager.tests:
+            if name not in mandatory_tests:
+                checkbox = CheckBox(checkbox_container, text=name, grid=[0, row])
+                checkbox.value = True  # Standardmäßig aktiviert
+                self.test_checkboxes[name] = checkbox
+                row += 1
+
+        # Buttons für Select All / Deselect All
+        control_box = Box(self.app, layout="grid", border=True)
+        PushButton(control_box, text="Select All", grid=[0, 0], command=self.select_all_tests)
+        PushButton(control_box, text="Deselect All", grid=[1, 0], command=self.deselect_all_tests)
+
+
+
 
     def timebox(self):
         self.time_box = Box(self.app,width="fill", height=30, align ="bottom", border=True)
@@ -132,9 +167,14 @@ class AppInit:
         if text is not None:
             self.serial_number.value = text
             self.reset_test_status()
-            self.test_manager.execute_tests()
-            self.start_button.disable()
-            self.stop_button.enable()
+            selected_tests = [
+            name for name, checkbox in self.test_checkboxes.items()
+            if checkbox.value
+        ]
+        self.test_manager.execute_tests(selected_tests)
+        self.start_button.disable()
+        self.stop_button.enable()
+
             
     def close_app(self):
          close_prompt = yesno("Close","Do you want to close the App?")

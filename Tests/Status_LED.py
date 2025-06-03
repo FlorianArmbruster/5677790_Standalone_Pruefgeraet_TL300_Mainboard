@@ -41,7 +41,7 @@ class statusLED(BaseTest):
 
         if testResult:
             self.app.after(0, lambda: self.complete("Passed"))
-            self.app.after(5000, self.manager.execute_next_test)
+            self.app.after(5000, self.manager.execute_next_test)    #5sec Wait for board to boot correctly
         else:
             self.app.after(0, self.on_fail)
 

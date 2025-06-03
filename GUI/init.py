@@ -107,7 +107,7 @@ class AppInit:
 
     def update_test_list(self, test_name):
         test_box = Box(self.app, width="fill", height=30, align="top", border=True)
-        test_name_box = Box(test_box, width=200, height=25, align="left")
+        test_name_box = Box(test_box, width=300, height=25, align="left")
         status_box = Box(test_box, width=200, height=25, align="right", border=True)
         status_box.bg = "#eeeee4" 
 

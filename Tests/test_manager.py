@@ -11,7 +11,9 @@ from .USB_Test import usbTest
 from .RAM_Test import ramTest
 from .SD_Test import sdTest
 from .RTC_Test import rtcTest
-from .Display_Farb_Test import displayFarbTest
+from .Display_Farb_Test_Gn import displayFarbTestGn
+from .Display_Farb_Test_Bl import displayFarbTestBl
+from .Display_Farb_Test_Rd import displayFarbTestRd
 from .Touch_Test import touchTest
 from .Input_Voltage_Fail_Detection_Test import inputVoltageFailTest
 from .Done_Power_Off import donePowerOff
@@ -70,8 +72,14 @@ class TestManager:
         self.register_test("RTC Test")
         self.tests.append(rtcTest(app,self.update_status, len(self.tests),self, self.serial_comm))
 
-        self.register_test("Display Color Test")
-        self.tests.append(displayFarbTest(app,self.update_status, len(self.tests),self, self.serial_comm))
+        self.register_test("Display Color Test Green")
+        self.tests.append(displayFarbTestGn(app,self.update_status, len(self.tests),self, self.serial_comm))
+
+        self.register_test("Display Color Test Blue")
+        self.tests.append(displayFarbTestBl(app,self.update_status, len(self.tests),self, self.serial_comm))
+
+        self.register_test("Display Color Test Red")
+        self.tests.append(displayFarbTestRd(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Touch Test")
         self.tests.append(touchTest(app,self.update_status, len(self.tests),self, self.serial_comm))

@@ -58,9 +58,15 @@ class donePowerOff(BaseTest):
 
         if testResult:
             self.app.after(0, lambda: self.complete("Passed"))
-            self.app.after(0, self.tests_complete_pass)
+            self.app.after(0, self.check_all_tests_passed)
         else:
             self.app.after(0, self.on_fail)
+
+    
+    def check_all_tests_passed(self):
+        all_passed = all(test["status"] == "Passed" for test in self.manager.tests_status)
+        if all_passed:
+            self.tests_complete_pass()
 
     def on_fail(self):
         self.complete("Failed")

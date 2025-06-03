@@ -16,7 +16,7 @@ class AppInit:
         self.create_test_list_header()
         self.timebox()
         self.test_manager = TestManager(
-            self.app, self.update_status, self.update_test_list, self.run_serial_number_prompt, self.start_button, self.stop_button
+            self.app, self.update_status, self.update_test_list,self.update_test_list, self.run_serial_number_prompt, self.start_button, self.stop_button, self.tests_status
 
         )
 

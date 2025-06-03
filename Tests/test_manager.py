@@ -22,17 +22,16 @@ from serialCommunication import SerialCommunication
 # Import other tests here
 
 class TestManager:
-    def __init__(self, app, update_status_callback, register_test_callback,run_serial_promt_test, start_button, stop_button):
+    def __init__(self, app, update_status_callback, register_test_callback,update_test_list_callback, run_serial_promt_test, start_button, stop_button, tests_status):
         self.app = app
         self.update_status = update_status_callback
         self.register_test = register_test_callback
         self.run_serial_prompt = run_serial_promt_test
         self.serial_comm = SerialCommunication()
-
-        
-    
+        self.update_test_list = update_test_list_callback
         self.start_button = start_button
         self.stop_button = stop_button
+        self.tests_status = tests_status
 
         #self.stop_current_test = stop_current_test
 
@@ -140,4 +139,6 @@ class TestManager:
 
     def stop_current_tests(self):
         if self.current_test_index > 0:
-            self.filtered_tests[self.current_test_index - 1].on_fail()
+            _, test_instance = self.filtered_tests[self.current_test_index - 1]
+            test_instance.on_fail()
+

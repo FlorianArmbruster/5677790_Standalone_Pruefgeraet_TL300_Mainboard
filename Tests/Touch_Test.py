@@ -1,5 +1,6 @@
-from guizero import Picture, Text, Box
+from guizero import Picture, Text, Box, info
 from .base_test import BaseTest
+
 from GUI.popup import PopUpWindow
 import threading
 
@@ -79,8 +80,14 @@ class touchTest(BaseTest):
     
 
     def execute(self):
+        info("Touch Test", "Touch the Touchscreen within the next 10 seconds")
+
         # Starte den Test in einem separaten Thread
         threading.Thread(target=self.run_test).start()
+        
+    #def start_touch_test(self):
+        
+     #   self.run_test()
 
     def run_test(self):
         # Prüfen, ob die serielle Verbindung verfügbar ist
@@ -94,10 +101,13 @@ class touchTest(BaseTest):
 
         # GUI-Logik im Hauptthread
         if testResult:
-            self.app.after(0, self.show_popup_and_pass)
+            self.app.after(0, lambda: self.complete("Passed"))
+            self.app.after(0, self.manager.execute_next_test)
         else:
             self.app.after(0, self.on_fail)
 
+            
+    """
     def show_popup_and_pass(self):
         # Popup anzeigen
         self.popup = PopUpWindow(
@@ -110,6 +120,8 @@ class touchTest(BaseTest):
         self.popup.show()
 
     def build_content_box(self, parent):
+
+        
         box = Box(parent, width="fill", height="fill", align="top")
         box2 = Box(box, width="fill", height="30", align="top")
 
@@ -120,11 +132,11 @@ class touchTest(BaseTest):
         )
 
         return box
-
-    def pass_action(self):
-        self.complete("Passed")
-        self.popup.hide()
-        self.manager.execute_next_test()
+        """
+    #def pass_action(self):
+        #self.complete("Passed")
+        #self.popup.hide()
+        #self.manager.execute_next_test()
 
     def on_fail(self):
         self.complete("Failed")

@@ -4,12 +4,14 @@ from guizero import  info, error, yesno
 
 
 class BaseTest(ABC):
-    def __init__(self, app, on_finish, test_index, manager):
+    def __init__(self, app, on_finish, test_index, manager, serial_comm):
         self.app = app
         self.on_result = on_finish
         self.test_index = test_index
         self.manager = manager
         self.result = "Pending"
+        self.serial_comm = serial_comm
+
         
 
     @abstractmethod
@@ -24,7 +26,9 @@ class BaseTest(ABC):
 
     def complete(self, result):
         self.result = result
+        #print(f"Ergebnis von Test: {self.result}")
         self.on_result(self.test_index, result)
+
 
     def tests_complete_pass(self):
         info("Tests Passed", "The Board Passed the Tests")

@@ -57,7 +57,10 @@ class BatteryChangeTest(BaseTest):
 
     def pass_action(self):
         self.complete("Passed")
-        self.manager.execute_next_test()
+        self.app.after(100, self.manager.execute_next_test)
+        #self.manager.execute_next_test()
+
+
 
     def on_fail(self):
         self.complete("Failed")

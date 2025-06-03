@@ -27,6 +27,7 @@ class TestManager:
         self.serial_comm = SerialCommunication()
         #self.stop_current_test = stop_current_test
 
+        self.serial_comm.getInfo()
         # Register all tests
         self.tests = []
 
@@ -34,13 +35,13 @@ class TestManager:
         self.tests.append(selfTest(app,self.update_status, len(self.tests), self, self.serial_comm))
 
         self.register_test("Battery Change")
-        self.tests.append(BatteryChangeTest(app, self.update_status, len(self.tests), self))
+        self.tests.append(BatteryChangeTest(app, self.update_status, len(self.tests), self, self.serial_comm))
 
         self.register_test("Activate Cylinder")
         self.tests.append(activateCylinder(app,self.update_status, len(self.tests),self, self.serial_comm))
 
         self.register_test("Power On")
-        self.tests.append(powerOn(app,self.update_status, len(self.tests),self))
+        self.tests.append(powerOn(app,self.update_status, len(self.tests),self,  self.serial_comm))
 
         self.register_test("DMM")
         self.tests.append(DMM(app,self.update_status, len(self.tests),self, self.serial_comm))
@@ -95,10 +96,12 @@ class TestManager:
         self.execute_next_test()
 
     def execute_next_test(self):
+        
         if self.current_test_index < len(self.tests):
             current_test = self.tests[self.current_test_index]
-            current_test.execute()
             self.current_test_index += 1
+            current_test.execute()
+            
         else:
             print("All tests completed.")
 

@@ -1,34 +1,23 @@
-import serial;
+import serial
 import serial.tools.list_ports
 
-
-class SerialCommunication():
-    
+class SerialCommunication:
     def __init__(self):
         self.ser = None
         self.comport = None
-        self.Text = ""
+        self.answerPassed = "1"
+        self.answerFailed = "0"
         self.Text_bytes = b""
         self.connected = 0
-        self.getInfo()  # Port wird direkt beim Erstellen geöffnet
-
-    def message(self):
-        self.Text = "1"
-        Texttosend = "10"
-        self.Text_bytes=Texttosend.encode()
+        self.getInfo()
 
     def getInfo(self):
-        
-        # Wenn der Port bereits offen ist, nichts tun
         if self.ser and self.ser.is_open:
             return
-
-        # Wenn bereits versucht wurde, aber fehlgeschlagen ist, auch nichts tun
         if self.ser is not None:
             return
 
         ports = serial.tools.list_ports.comports()
-
         if not ports:
             self.comport = None
             self.ser = None
@@ -38,31 +27,45 @@ class SerialCommunication():
             if not hasattr(self, 'comport') or self.comport != port.device:
                 self.comport = port.device
                 try:
-                    self.ser = serial.Serial(self.comport,115200)  # Hier wird self.ser gesetzt
+                    self.ser = serial.Serial(self.comport, 115200, timeout=20)
                     print(f"Port {self.comport} geöffnet.")
                     break
-                
                 except serial.SerialException as e:
                     print(f"Fehler beim Öffnen von {self.comport}: {e}")
                     self.ser = None
-     
-    def printtext(self):
-        self.message()
-        self.getInfo()
 
-        if self.ser:
+    def send_and_receive(self, text_to_send):
+        """
+        Sendet einen Befehl an den ESP32 und wartet bis zu `timeout` Sekunden auf eine Antwort.
+        Beendet die Abfrage sofort, wenn '1' oder '0' empfangen wird.
+        Gibt True zurück bei Erfolg ('1'), sonst False ('0' oder Timeout).
+        """
+        #self.getInfo()
+        #if not self.ser or not self.ser.is_open:
+        #    print("Serielle Verbindung nicht verfügbar.")
+        #    self.connected = 0
+        #    return False
+
+        try:
+            self.Text_bytes = text_to_send.encode()
+            self.ser.reset_input_buffer()
             self.ser.write(self.Text_bytes)
-            data=self.ser.readline()
-            dataDecoded = data.decode('utf-8')
-            if self.Text in dataDecoded:
-                print(dataDecoded)
+    
+            data = self.ser.readline()
+            data_decoded = data.decode('utf-8').strip()
+            print(f"Antwort vom ESP: {data_decoded}")
+
+            if self.answerPassed in data_decoded:
                 self.connected = 1
-                return
-            self.connected = 0
-        else:
-            #self.connected = 1 #SIMULATION ONLY REMOVE FOR FINAL!!!!! 
-            self.connected = 0
+                return True
+            elif self.answerFailed in data_decoded:
+                self.connected = 0
+                return False
+            else:
+                self.connected = 0
+                return False
 
-
-                
-            
+        except Exception as e:
+            print(f"Fehler bei der seriellen Kommunikation: {e}")
+            self.connected = 0
+            return False

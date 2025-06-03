@@ -130,8 +130,8 @@ class AppInit:
         text = self.app.question("SerialNumber", "Enter the Board SerialNumber:")
         if text is not None:
             self.serial_number.value = text
-            self.test_manager.execute_tests()
             self.reset_test_status()
+            self.test_manager.execute_tests()
             self.start_button.disable()
             self.stop_button.enable()
             

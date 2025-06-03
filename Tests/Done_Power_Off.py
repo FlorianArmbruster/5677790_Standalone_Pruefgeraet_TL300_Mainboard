@@ -58,7 +58,7 @@ class donePowerOff(BaseTest):
 
         if testResult:
             self.app.after(0, lambda: self.complete("Passed"))
-            self.app.after(0, self.manager.execute_next_test)
+            self.app.after(0, self.tests_complete_pass)
         else:
             self.app.after(0, self.on_fail)
 

@@ -21,12 +21,18 @@ from serialCommunication import SerialCommunication
 # Import other tests here
 
 class TestManager:
-    def __init__(self, app, update_status_callback, register_test_callback,run_serial_promt_test):
+    def __init__(self, app, update_status_callback, register_test_callback,run_serial_promt_test, start_button, stop_button):
         self.app = app
         self.update_status = update_status_callback
         self.register_test = register_test_callback
         self.run_serial_prompt = run_serial_promt_test
         self.serial_comm = SerialCommunication()
+
+        
+    
+        self.start_button = start_button
+        self.stop_button = stop_button
+
         #self.stop_current_test = stop_current_test
 
         self.serial_comm.getInfo()

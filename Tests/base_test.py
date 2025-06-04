@@ -33,27 +33,12 @@ class BaseTest(ABC):
 
     
     def tests_complete_pass(self):
-        from .Done_Power_Off import donePowerOff
         info("Tests Passed", "The Board Passed the Tests")
 
-        # donePowerOff registrieren und anzeigen
-        power_off_test = donePowerOff(
-            self.app, self.on_result, len(self.manager.tests), self.manager, self.serial_comm
-        )
-        self.manager.register_test("Done/Power Off")
-        self.manager.tests.append(("Done/Power Off", power_off_test))
-        self.manager.filtered_tests.append(("Done/Power Off", power_off_test))
-        self.update_test_list("Done/Power Off")
-
-        power_off_test.execute()
-
-        self.start_next_board_y_n()
         self.manager.start_button.enable()
         self.manager.stop_button.disable()
 
-
-
-
+        self.start_next_board_y_n()
     
     
     def tests_complete_failed(self):
@@ -68,21 +53,29 @@ class BaseTest(ABC):
             self.manager,
             self.serial_comm
         )
-
         # Test registrieren und in GUI anzeigen
         self.manager.register_test("Done/Power Off")
         self.manager.tests.append(("Done/Power Off", power_off_test))
         self.manager.filtered_tests.append(("Done/Power Off", power_off_test))
         self.update_test_list("Done/Power Off") 
 
-
         power_off_test.execute()
 
-        self.start_next_board_y_n()
         self.manager.start_button.enable()
         self.manager.stop_button.disable()
 
+        self.start_next_board_y_n()
+
+
     def start_next_board_y_n(self):
+        next_board = False
         next_board = yesno("Start next Bord Test", "Do you want to start the next Board test?")
         if next_board == True:
+            self.manager.start_button.disable()
+            self.manager.stop_button.enable()
             self.manager.run_serial_prompt()
+
+        if next_board == False:
+            self.manager.start_button.enable()
+            self.manager.stop_button.disable()
+            

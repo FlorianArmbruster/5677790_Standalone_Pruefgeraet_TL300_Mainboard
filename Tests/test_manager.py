@@ -109,6 +109,7 @@ class TestManager:
         # Wenn nicht alle optionalen Tests ausgewählt wurden
         if set(selected_optional_tests) != set(all_optional_tests) and selected_optional_tests:
             # Finde den Namen des ersten optionalen Tests in der gefilterten Liste
+            first_optional_index = None  # Standardwert
             for i, (name, _) in enumerate(self.filtered_tests):
                 if name in selected_optional_tests:
                     first_optional_index = i

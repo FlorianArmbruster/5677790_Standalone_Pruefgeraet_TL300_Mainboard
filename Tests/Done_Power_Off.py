@@ -64,8 +64,9 @@ class donePowerOff(BaseTest):
 
     
     def check_all_tests_passed(self):
+        filtered_test_names = [name for name, _ in self.manager.filtered_tests]
         all_passed = False
-        all_passed = all(test["status"] == "Passed" for test in self.manager.tests_status)
+        all_passed = all(test["status"] == "Passed" for test in self.manager.tests_status if test["name"] in filtered_test_names)
         print(all_passed)
         if all_passed:
             self.tests_complete_pass()

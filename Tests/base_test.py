@@ -53,11 +53,7 @@ class BaseTest(ABC):
             self.manager,
             self.serial_comm
         )
-        # Test registrieren und in GUI anzeigen
-        self.manager.register_test("Done/Power Off")
-        self.manager.tests.append(("Done/Power Off", power_off_test))
-        self.manager.filtered_tests.append(("Done/Power Off", power_off_test))
-        self.update_test_list("Done/Power Off") 
+        
 
         power_off_test.execute()
 

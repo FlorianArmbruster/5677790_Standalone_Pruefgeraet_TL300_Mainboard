@@ -3,27 +3,6 @@ from .base_test import BaseTest
 import threading
 
 class statusLED(BaseTest):
-    """
-    def execute(self):
-        # Prüfen, ob die serielle Verbindung verfügbar ist
-        if not self.serial_comm.ser or not self.serial_comm.ser.is_open:
-            print("Serielle Verbindung nicht verfügbar oder nicht geöffnet.")
-            self.on_fail()
-            return
-        
-        # Nachricht senden und direkt auf Antwort prüfen
-        result = self.serial_comm.send_and_receive("50")
-
-        if result:
-            self.complete("Passed")
-            self.manager.execute_next_test()
-        else:
-            self.on_fail()
-
-    def on_fail(self):
-        self.complete("Failed")
-        self.tests_complete_failed()
-    """
 
     def execute(self):
         # Starte den Test in einem separaten Thread
@@ -36,15 +15,17 @@ class statusLED(BaseTest):
             self.app.after(0, self.on_fail)
             return
 
+        # Befehl senden und Ergebnis prüfen
         testResult = self.serial_comm.send_and_receive("50")
-        #testResult = True  # Platzhalter für echten Test
 
+        # Ergebnis auswerten
         if testResult:
             self.app.after(0, lambda: self.complete("Passed"))
-            self.app.after(5000, self.manager.execute_next_test)    #5sec Wait for board to boot correctly
+            self.app.after(5000, self.manager.execute_next_test)    
         else:
             self.app.after(0, self.on_fail)
 
     def on_fail(self):
+        # Fehlerbehandlung
         self.complete("Failed")
         self.tests_complete_failed()

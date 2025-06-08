@@ -2,9 +2,9 @@ from guizero import Picture, Text, Box
 from .base_test import BaseTest
 from GUI.popup import PopUpWindow
 
-
 class BatteryChangeTest(BaseTest):
     def execute(self):
+        # Popup-Fenster für den Test anzeigen
         popup = PopUpWindow(
             self.app,
             title="Battery Change Test",
@@ -16,18 +16,20 @@ class BatteryChangeTest(BaseTest):
         self.popup = popup
         popup.show()
 
-        #self.perform_measurement()
-
     def build_content_box(self, parent):
-        
+        # Layout und Inhalte des Popups erstellen
         box = Box(parent, width="fill", height="fill", align="top")
         box2 = Box(box, width="fill", height ="30", align= "top")
         box5 = Box(box, width="fill", height ="40", align= "top")
         box6 = Box(box, width="fill", height ="40", align= "top")
         box3= Box(box, width = 175, height= 20, align ="left")
         box4= Box(box, width = 175, height= 20, align ="right")
+
+        # Bilder für falsche und richtige Batterieplatzierung
         BatteryF = Picture(box, image="./Bilder/Batterie_Falsch.JPG", align="left", height= 250, width= 250)
         BatteryR = Picture(box, image="./Bilder/Batterie_Richtig.JPG", align="right", height= 250, width= 250)
+
+        # Hinweise und Warnungen
         self.instruction_text = Text(
             box2, text="Please ensure the battery is inserted correctly.", align="top", size= 20
         )
@@ -37,32 +39,15 @@ class BatteryChangeTest(BaseTest):
         self.instruction_text = Text(
             box6, text="Remove Hands from Testdevice!", align="top", color= "red", font= "Impact", size= 20
         )
-       # self.measurement_text = Text(
-       #     box, text="Waiting for measurement...", align="top"
-       # )
-
         return box
 
-    #def perform_measurement(self):
-        #self.instruction_text.value = "Measuring battery voltage..."
-        #self.app.after(2000, self.update_measurement_result)
-
-    #def update_measurement_result(self):
-        # Simulate retrieving a measurement result
-        #measured_value = "3.7V"  # Here you would place your actual measurement code :D
-
-        # Update the measurement text with the result
-        #self.measurement_text.value = f"Measured Voltage: {measured_value}"
-        # Generally here is your logic of a test then
-
     def pass_action(self):
+        # Bei Erfolg: Test abschließen und nächsten starten
         self.complete("Passed")
         self.app.after(100, self.manager.execute_next_test)
-        #self.manager.execute_next_test()
-
-
 
     def on_fail(self):
+        # Bei Fehler: Test als fehlgeschlagen markieren und Popup schließen
         self.complete("Failed")
         self.tests_complete_failed()
         self.popup.hide()

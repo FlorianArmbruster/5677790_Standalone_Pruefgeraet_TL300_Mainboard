@@ -23,6 +23,7 @@ from serialCommunication import SerialCommunication
 
 class TestManager:
     def __init__(self, app, update_status_callback, register_test_callback,update_test_list_callback, run_serial_promt_test, start_button, stop_button, tests_status):
+        # Initialisierung von GUI-Komponenten, Status-Callbacks und serieller Kommunikation
         self.app = app
         self.update_status = update_status_callback
         self.register_test = register_test_callback
@@ -33,24 +34,21 @@ class TestManager:
         self.stop_button = stop_button
         self.tests_status = tests_status
 
-        #self.stop_current_test = stop_current_test
-
         self.serial_comm.getInfo()
 
-        
+        # Pflicht-Tests definieren
         self.mandatory_test_names = [
             "Self Test", "Battery Change", "Activate Cylinder", "Power On", "Done/Power Off"
         ]
 
-
-        # Register all tests
+        # Alle Tests registrieren
         self.tests = []
 
-        
         def add_test(name, test_instance):
             self.register_test(name)
             self.tests.append((name, test_instance))
 
+        # Tests hinzufügen
         add_test("Self Test", selfTest(app, self.update_status, len(self.tests), self, self.serial_comm))
         add_test("Battery Change", BatteryChangeTest(app, self.update_status, len(self.tests), self, self.serial_comm))
         add_test("Activate Cylinder", activateCylinder(app, self.update_status, len(self.tests), self, self.serial_comm))
@@ -71,27 +69,22 @@ class TestManager:
         add_test("Input Voltage Fail Test", inputVoltageFailTest(app, self.update_status, len(self.tests), self, self.serial_comm))
         add_test("Done/Power Off", donePowerOff(app, self.update_status, len(self.tests), self, self.serial_comm))
 
-
-        # Add other tests the same way: 
-        # self.register_test("Another Test")
-        # self.tests.append(AnotherTest(app, self.update_status, len(self.tests)))
-
+        # Initialisierung von Teststatus
         self.filtered_tests = []
         self.current_test_index = 0
 
     def reset_test_index(self):
+        # Testindex zurücksetzen
         self.current_test_index = 0
 
-   
-
-
     def execute_tests(self, selected_test_names):
-        
+        # Pflicht- und ausgewählte optionale Tests filtern        
         self.filtered_tests = [
             (name, test) for name, test in self.tests
             if name in self.mandatory_test_names or name in selected_test_names
         ]
 
+        # Testindex zurücksetzen
         self.reset_test_index()
 
         # Liste aller optionalen Tests
@@ -124,21 +117,21 @@ class TestManager:
 
             self.execute_next_test = delayed_execute_next
 
+        # Testausführung starten
         self.execute_next_test()
 
-
-
-
     def execute_next_test(self):
-        
+        # Nächsten Test ausführen, wenn vorhanden
         if self.current_test_index < len(self.filtered_tests):
             name, current_test = self.filtered_tests[self.current_test_index]
             self.current_test_index += 1
             current_test.execute()
         else:
+            # Alle Tests abgeschlossen
             print("All tests completed.")
 
     def stop_current_tests(self):
+        # Aktuellen Test abbrechen, wenn einer läuft
         if self.current_test_index > 0:
             _, test_instance = self.filtered_tests[self.current_test_index - 1]
             test_instance.on_fail()

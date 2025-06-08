@@ -3,44 +3,6 @@ from .base_test import BaseTest
 import threading
 
 class ramTest(BaseTest):
-
-    """
-    def execute(self):
-        # Prüfen, ob die serielle Verbindung verfügbar ist
-        if not self.serial_comm.ser or not self.serial_comm.ser.is_open:
-            print("Serielle Verbindung nicht verfügbar oder nicht geöffnet.")
-            self.on_fail()
-            return
-        # Nachricht vorbereiten 
-        self.serial_comm.Texttosend = "90"
-        self.serial_comm.Text_bytes = self.serial_comm.Texttosend.encode()
-        self.perform_measurement()
-
-    def perform_measurement(self):
-        try:
-            self.serial_comm.ser.write(self.serial_comm.Text_bytes)
-            data = self.serial_comm.ser.readline()
-            dataDecoded = data.decode('utf-8')
-            if self.serial_comm.Text in dataDecoded:
-                print(dataDecoded)
-        except Exception as e:
-            print(f"Fehler bei der seriellen Kommunikation: {e}")
-            self.on_fail()
-            return
-
-        self.app.after(1000, self.compare_measurement_results)
-    
-    def compare_measurement_results(self):
-        if self.serial_comm.connected == 1:
-            self.complete("Passed")
-            self.manager.execute_next_test()
-        else:
-            self.on_fail()
-
-    def on_fail(self):
-        self.complete("Failed")
-        self.tests_complete_failed()
-        """
     
     def execute(self):
         # Starte den Test in einem separaten Thread
@@ -53,9 +15,10 @@ class ramTest(BaseTest):
             self.app.after(0, self.on_fail)
             return
 
+        # Befehl senden und Ergebnis prüfen
         testResult = self.serial_comm.send_and_receive("90")
-        #testResult = True  # Platzhalter für echten Test
 
+        # Ergebnis auswerten
         if testResult:
             self.app.after(0, lambda: self.complete("Passed"))
             self.app.after(0, self.manager.execute_next_test)
@@ -63,5 +26,6 @@ class ramTest(BaseTest):
             self.app.after(0, self.on_fail)
 
     def on_fail(self):
+        # Fehlerbehandlung
         self.complete("Failed")
         self.tests_complete_failed()

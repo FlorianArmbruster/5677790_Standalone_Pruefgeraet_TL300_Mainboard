@@ -4,44 +4,6 @@ import threading
 
 class donePowerOff(BaseTest):
 
-    """
-    def execute(self):
-        # Prüfen, ob die serielle Verbindung verfügbar ist
-        if not self.serial_comm.ser or not self.serial_comm.ser.is_open:
-            print("Serielle Verbindung nicht verfügbar oder nicht geöffnet.")
-            self.on_fail()
-            return
-        # Nachricht vorbereiten 
-        self.serial_comm.Texttosend = "150"
-        self.serial_comm.Text_bytes = self.serial_comm.Texttosend.encode()
-        self.perform_measurement()
-
-    def perform_measurement(self):
-        try:
-            self.serial_comm.ser.write(self.serial_comm.Text_bytes)
-            data = self.serial_comm.ser.readline()
-            dataDecoded = data.decode('utf-8')
-            if self.serial_comm.Text in dataDecoded:
-                print(dataDecoded)
-        except Exception as e:
-            print(f"Fehler bei der seriellen Kommunikation: {e}")
-            self.on_fail()
-            return
-
-        self.app.after(1000, self.compare_measurement_results)
-    
-    def compare_measurement_results(self):
-        if self.serial_comm.connected == 1:
-            self.complete("Passed")
-            self.manager.execute_next_test()
-            self.tests_complete_pass()
-        else:
-            self.on_fail()
-
-    def on_fail(self):
-        self.complete("Failed")
-        self.tests_complete_failed()
-    """
     def execute(self):
         # Starte den Test in einem separaten Thread
         threading.Thread(target=self.run_test).start()
@@ -53,18 +15,21 @@ class donePowerOff(BaseTest):
             self.app.after(0, self.on_fail)
             return
 
+        # Befehl senden und Ergebnis prüfen
         testResult = self.serial_comm.send_and_receive("150")
-        #testResult = True  # Platzhalter für echten Test
-
+        
+        # Ergebnis auswerten
         if testResult:
             self.app.after(0, lambda: self.complete("Passed"))
             self.app.after(0, self.check_all_tests_passed)
         else:
             self.app.after(0, self.on_fail)
 
-    
     def check_all_tests_passed(self):
+        # Nur gefilterte Tests berücksichtigen
         filtered_test_names = [name for name, _ in self.manager.filtered_tests]
+
+        # Prüfen, ob alle relevanten Tests bestanden wurden
         all_passed = False
         all_passed = all(test["status"] == "Passed" for test in self.manager.tests_status if test["name"] in filtered_test_names)
         print(all_passed)
@@ -73,6 +38,7 @@ class donePowerOff(BaseTest):
             print(all_passed)
 
     def on_fail(self):
+        # Fehlerbehandlung
         self.complete("Failed")
         self.tests_complete_failed()
     
